@@ -1,0 +1,19 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "iphone xs",
+      "price": 9999
+    },
+    {
+      "id": 2,
+      "name": "macbook pro",
+      "price": 19999
+    },
+    {
+      "id": 3,
+      "name": "trackpad",
+      "price": 946
+    }
+  ]
+}

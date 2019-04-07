@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "expression",
   "description": "表情app",
-  "appid": "touristappid",
+  "appid": "wx246e9662c6cabd8a",
   "setting": {
     "urlCheck": true,
     "es6": false,
