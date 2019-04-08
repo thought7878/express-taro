@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, ScrollView } from '@tarojs/components'
-import { AtSearchBar, AtButton, AtActivityIndicator } from 'taro-ui'
+import { View, Image } from '@tarojs/components'
+import { AtSearchBar, AtActivityIndicator, AtTabs, AtTabsPane } from 'taro-ui'
 
 class Search extends Component {
   config = {
@@ -12,7 +12,8 @@ class Search extends Component {
     images: [],
     pageNum: 1,
     length: 10,
-    loading: false
+    loading: false,
+    currentTab: 0
   }
   // load more imgs
   onReachBottom() {
@@ -34,6 +35,7 @@ class Search extends Component {
   onChangeHandler = value => {
     this.setState({ value })
   }
+
   // first request search imgs
   onActionClickHandler = () => {
     console.log('onActionClick')
@@ -61,6 +63,12 @@ class Search extends Component {
     console.log('onConfirm')
   }
 
+  handleTabClick(value) {
+    this.setState({
+      currentTab: value
+    })
+  }
+
   render() {
     const { images, loading } = this.state
     const imagesList = images.map((img, index) => (
@@ -68,7 +76,7 @@ class Search extends Component {
         <Image mode="aspectFit" src={img.locImageLink} className="list-img" />
       </View>
     ))
-
+    const tabList = [{ title: '表情' }, { title: '表情包' }]
     return (
       <View className="page-container">
         <AtSearchBar
@@ -78,7 +86,22 @@ class Search extends Component {
           onConfirm={this.onConfirmHandler.bind(this)}
           onActionClick={this.onActionClickHandler.bind(this)}
         />
-        <View className="img-list pt-2">{imagesList}</View>
+        <AtTabs
+          current={this.state.currentTab}
+          tabList={tabList}
+          onClick={this.handleTabClick.bind(this)}
+          swipeable={false}
+          animated={true}
+        >
+          <AtTabsPane current={this.state.currentTab} index={0}>
+            <View className="img-list pt-2">{imagesList}</View>
+          </AtTabsPane>
+          <AtTabsPane current={this.state.currentTab} index={1}>
+            <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
+              标签页二的内容
+            </View>
+          </AtTabsPane>
+        </AtTabs>
 
         {loading && (
           <View className="activity-indicator-container mb-2">
