@@ -88,3 +88,28 @@ $list-img-size: 300px !default;
   display: flex;
   justify-content: center;
 }
+
+// modal
+.modal-img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-img {
+  width: 600px;
+  height: 600px;
+}
+.modal-ad-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-ad-img {
+  width: 600px;
+  height: 300px;
+}
+.modal-btn-container {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}

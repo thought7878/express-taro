@@ -1,6 +1,17 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
-import { AtSearchBar, AtActivityIndicator, AtTabs, AtTabsPane } from 'taro-ui'
+import { View, Image, Button } from '@tarojs/components'
+import {
+  AtSearchBar,
+  AtActivityIndicator,
+  AtTabs,
+  AtTabsPane,
+  AtModal,
+  AtModalHeader,
+  AtModalContent,
+  AtModalAction,
+  AtButton,
+  AtIcon
+} from 'taro-ui'
 
 class Search extends Component {
   config = {
@@ -13,7 +24,9 @@ class Search extends Component {
     pageNum: 1,
     length: 10,
     loading: false,
-    currentTab: 0
+    currentTab: 0,
+    isShowModal: false,
+    modalImg: {}
   }
   // load more imgs
   onReachBottom() {
@@ -60,7 +73,8 @@ class Search extends Component {
   }
 
   onConfirmHandler = () => {
-    console.log('onConfirm')
+    console.log('onConfirm invoked onActionClickHandler')
+    this.onActionClickHandler()
   }
 
   handleTabClick(value) {
@@ -69,10 +83,40 @@ class Search extends Component {
     })
   }
 
+  clickImgHandler(e) {
+    console.log('clickImg', e)
+    e.stopPropagation()
+    const img = e.currentTarget.dataset.img
+    this.setState({
+      isShowModal: true,
+      modalImg: img
+    })
+    console.log(img)
+  }
+
+  // modal event handler
+  handleModalClose() {
+    this.setState({
+      isShowModal: false,
+      modalImg: {}
+    })
+  }
+  handleCancel() {
+    console.log('handleCancel')
+  }
+  handleConfirm() {
+    console.log('handleConfirm')
+  }
+
   render() {
-    const { images, loading } = this.state
+    const { images, loading, isShowModal, modalImg } = this.state
     const imagesList = images.map((img, index) => (
-      <View className="img-item mb-2" key={index}>
+      <View
+        className="img-item mb-2"
+        key={index}
+        data-img={img}
+        onClick={this.clickImgHandler.bind(this)}
+      >
         <Image mode="aspectFit" src={img.locImageLink} className="list-img" />
       </View>
     ))
@@ -108,6 +152,61 @@ class Search extends Component {
             <AtActivityIndicator content="加载中..." mode="normal" />
           </View>
         )}
+        {/* modal */}
+        <AtModal
+          // isOpened={true}
+          isOpened={isShowModal}
+          onClose={this.handleModalClose}
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
+        >
+          <AtModalContent>
+            <View className="modal-img-container">
+              <Image
+                mode="aspectFit"
+                // src="https://i02picsos.sogoucdn.com/423c9ef490d9b335"
+                src={modalImg.locImageLink}
+                className="modal-img"
+              />
+            </View>
+          </AtModalContent>
+          <AtModalAction>
+            <View className="modal-btn-container py-2">
+              <AtButton
+                // type="secondary"
+                // className="at-icon at-icon-heart"
+                // circle="50"
+                size="small"
+              >
+                <AtIcon value="heart" size="18" color="#F00" />
+                收藏
+              </AtButton>
+              <AtButton
+                // className="at-icon at-icon-share"
+                // circle="50"
+                size="small"
+              >
+                <AtIcon value="share" size="18" color="#F00" />
+                发送
+              </AtButton>
+              {/* <AtButton
+                // className="at-icon at-icon-download"
+                // circle="50"
+                size="small"
+              >
+                <AtIcon value="download" size="18" color="#F00" />
+                保存
+              </AtButton> */}
+            </View>
+          </AtModalAction>
+          {/* <View className="modal-ad-container">
+            <Image
+              mode="aspectFit"
+              src="http://cdn.clm02.com/ezvivi.com/266530/1499736916_204.jpeg"
+              className="modal-ad-img"
+            />
+          </View> */}
+        </AtModal>
       </View>
     )
   }
