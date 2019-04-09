@@ -40,6 +40,8 @@ class Search extends Component {
           images: [...images, ...res.data.items],
           pageNum: pageNum + 1,
           loading: false
+        }).catch(error => {
+          console.log(error.message)
         })
       })
     }
@@ -56,10 +58,14 @@ class Search extends Component {
     const start = 0
     const length = this.state.length
     if (value) {
-      this.requestSearchImgs(value, start, length).then(res => {
-        console.log(res.data.items)
-        this.setState({ images: res.data.items })
-      })
+      this.requestSearchImgs(value, start, length)
+        .then(res => {
+          console.log(res.data.items)
+          this.setState({ images: res.data.items })
+        })
+        .catch(error => {
+          console.log(error.message)
+        })
     }
   }
 
@@ -110,6 +116,7 @@ class Search extends Component {
 
   render() {
     const { images, loading, isShowModal, modalImg } = this.state
+    //
     const imagesList = images.map((img, index) => (
       <View
         className="img-item mb-2"
@@ -117,10 +124,11 @@ class Search extends Component {
         data-img={img}
         onClick={this.clickImgHandler.bind(this)}
       >
-        <Image mode="aspectFit" src={img.locImageLink} className="list-img" />
+        <Image mode="aspectFit" src={img.oriPicUrl} className="list-img" />
       </View>
     ))
     const tabList = [{ title: '表情' }, { title: '表情包' }]
+    //
     return (
       <View className="page-container">
         <AtSearchBar
@@ -162,34 +170,37 @@ class Search extends Component {
         >
           <AtModalContent>
             <View className="modal-img-container">
-              <Image
-                mode="aspectFit"
-                // src="https://i02picsos.sogoucdn.com/423c9ef490d9b335"
-                src={modalImg.locImageLink}
-                className="modal-img"
-              />
+              {modalImg.oriPicUrl && (
+                <Image
+                  mode="aspectFit"
+                  // src="https://i02picsos.sogoucdn.com/423c9ef490d9b335"
+
+                  src={modalImg.oriPicUrl}
+                  className="modal-img"
+                />
+              )}
             </View>
           </AtModalContent>
-          <AtModalAction>
-            <View className="modal-btn-container py-2">
-              <AtButton
-                // type="secondary"
-                // className="at-icon at-icon-heart"
-                // circle="50"
-                size="small"
-              >
-                <AtIcon value="heart" size="18" color="#F00" />
-                收藏
-              </AtButton>
-              <AtButton
-                // className="at-icon at-icon-share"
-                // circle="50"
-                size="small"
-              >
-                <AtIcon value="share" size="18" color="#F00" />
-                发送
-              </AtButton>
-              {/* <AtButton
+          {/* <AtModalAction> */}
+          <View className="modal-btn-container py-2">
+            <AtButton
+              // type="secondary"
+              // className="at-icon at-icon-heart"
+              // circle="50"
+              size="small"
+            >
+              <AtIcon value="heart" size="18" color="#F00" />
+              收藏
+            </AtButton>
+            <AtButton
+              // className="at-icon at-icon-share"
+              // circle="50"
+              size="small"
+            >
+              <AtIcon value="share" size="18" color="#F00" />
+              发送
+            </AtButton>
+            {/* <AtButton
                 // className="at-icon at-icon-download"
                 // circle="50"
                 size="small"
@@ -197,8 +208,8 @@ class Search extends Component {
                 <AtIcon value="download" size="18" color="#F00" />
                 保存
               </AtButton> */}
-            </View>
-          </AtModalAction>
+          </View>
+          {/* </AtModalAction> */}
           {/* <View className="modal-ad-container">
             <Image
               mode="aspectFit"
